@@ -17,7 +17,7 @@
     - 运维部署
   - 多人社区
 
-![image-20220419152011066](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220419152011066.png)
+![image-20220419152011066](https://s2.loli.net/2022/12/09/uEbop7SMOGQntcg.png)
 
 ----
 
@@ -104,9 +104,9 @@
 - **查看 Node 环境版本号**
 - 下载[https://nodejs.org/en/](https://gitee.com/link?target=https%3A%2F%2Fnodejs.org%2Fen%2F)
 
-  - ![image-20220412173244676](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220412173244676.png)
+  - ![image-20220412173244676](https://s2.loli.net/2022/12/09/D5V8BwYEjZxaslJ.png)
 
-  - ![image-20220412173342890](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220412173342890.png)
+  - ![image-20220412173342890](https://s2.loli.net/2022/12/09/jdqP7Z8GsB1NlFz.png)
 - **安装**
   - 一直 next 
 - **确认 node 是否安装成功**
@@ -295,7 +295,7 @@ fs.access("./hello.txt", function(error) {
   - 例如 http 服务的 80
 
 
-![image-20220421091156235](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220421091156235.png)
+![image-20220421091156235](https://s2.loli.net/2022/12/09/tHw5yms2DCrqfVW.png)
 
 ----
 
@@ -714,13 +714,13 @@ let ret = template.render('模板字符串', 替换对象)
 - 第一次请求的是页面（字符串）
 - 第二次请求的是数据接口
 
-![image-20220425144550169](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220425144550169.png)
+![image-20220425144550169](https://s2.loli.net/2022/12/09/uYcWOxqs3ljeMFK.png)
 
 **服务端渲染**
 
 - 只执行一次数据请求
 
-![image-20220425144626236](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220425144626236.png)
+![image-20220425144626236](https://s2.loli.net/2022/12/09/OP9XbuKcDLRweaC.png)
 
 ### 案例 服务器渲染
 
@@ -1330,8 +1330,6 @@ npm 存储包文件的服务器在国外，有时候会被墙，下载速度很�
 
 - 只要经过了上面命令的配置，则以后所有的 `npm install` 都会默认的从 淘宝的服务器下载
 
-
-
 ----
 
 ### package.json
@@ -1399,7 +1397,7 @@ npm init -y
 npm install express --save
 ```
 
-![image-20220429151717514](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220429151717514.png)
+![image-20220429151717514](https://s2.loli.net/2022/12/09/JSzIXhrpxVUeG8u.png)
 
 ### 简单使用
 
@@ -1853,7 +1851,7 @@ connection.end();
 
 使用 MySQL 数据库需要自己来规划数据结构例如：
 
-![image-20220509152211227](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220509152211227.png)
+![image-20220509152211227](https://s2.loli.net/2022/12/09/WnKC1FAaQ7eMGOt.png)
 
 ### MySQL 的基本使用
 
@@ -2100,11 +2098,11 @@ connection.query('SELECT * FROM users', function (error, results) {
 
 [MongoDB 下载地址](https://www.mongodb.com/download-center/community)
 
-![image-20220506201048726](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220506201048726.png)
+![image-20220506201048726](https://s2.loli.net/2022/12/09/SHohL83aVQAjfJ9.png)
 
-![image-20220506201553751](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220506201553751.png)
+![image-20220506201553751](https://s2.loli.net/2022/12/09/mZbjpzSycA43RtN.png)
 
-![image-20220506201910894](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220506201910894.png)
+![image-20220506201910894](https://s2.loli.net/2022/12/09/V74ys1ivwCHQUbL.png)
 
 #### 环境配置
 
@@ -2397,8 +2395,6 @@ User.remove({
 
 - 特点：从集合中删除所有匹配的文档，无论如何，都会删除
 
-
-
 #### 数据更改（改）
 
 findByIdAndUpdate() 根据 id 来更新数据
@@ -2516,7 +2512,7 @@ Promise 是一个构造函数，它的出现为了解决回调地狱的问题
 - Promise 是一个容器，而容器中存放了一个异步任务（pending）
   - 这个异步任务会有两种状态（Resolved：成功）和（Rejected：失败）而它只能变成其中的一种
 
-![image-20220510193644814](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220510193644814.png)
+![image-20220510193644814](https://s2.loli.net/2022/12/09/jsP7neoWEXrmGMi.png)
 
 - Promise：承诺，保证
 - Promise：本身不是异步，但往往都是内部封装一个异步任务
@@ -2555,7 +2551,7 @@ p1
 
 then函数（ES6）说明：
 
-![image-20220510194027835](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220510194027835.png)
+![image-20220510194027835](https://s2.loli.net/2022/12/09/nFltXbQxLU6rDzG.png)
 
 封装Promise中的readFile方法
 
@@ -2845,7 +2841,7 @@ promise
 
 就形象如这个图：自来水厂的净水过程
 
-![image-20220528145547468](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220528145547468.png)
+![image-20220528145547468](https://s2.loli.net/2022/12/09/waz8qQWlmo6ktAS.png)
 
 同一个请求对象所经过的中间件都是同一个请求对象的响应对象
 
@@ -2853,7 +2849,7 @@ promise
 
 在多个中间件之间，共享同一份 `req` 和 `res` 。基于这样的特性，我们可以在上游的中间件，统一为 `res` 或 `res` 对象添加自定义的属性或方法，供下游的中间件或路由进行使用
 
-![image-20220528204747439](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220528204747439.png)
+![image-20220528204747439](https://s2.loli.net/2022/12/09/RYc985sGr7NZzbn.png)
 
 ### 中间件的分类
 
@@ -2953,8 +2949,6 @@ app.delete("/delete", function (req, res, next) {
 - `express.static` 快速托管静态资源的内置中间件，例如：HTML 文件、图片、CSS 样式等（无兼容性）
 - `express.json` 解析 JSON 格式的请求体数据（有兼容性，仅在 4.16.0 + 版本中可用）
 - `express.urlencoded` 解析 URL-encoded 格式的请求体数据（有兼容性，仅在 4.16.0 + 版本中可用）
-
-
 
 ### Express 的中间件
 
@@ -3190,11 +3184,11 @@ let html = template("06.art", {
 
 - 保存数据的文件一定是 `.json` 的文件格式
 
-![image-20220430151307999](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220430151307999.png)
+![image-20220430151307999](https://s2.loli.net/2022/12/09/1erTSs5DwbgF47V.png)
 
 - 当我们从文件内读取出的数据一定是字符串类型的
 
-![image-20220430151423460](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220430151423460.png)
+![image-20220430151423460](https://s2.loli.net/2022/12/09/wQJlrZRBbP4p2uq.png)
 
 - 这时候我们需要手动转换成对象类型
 
@@ -3202,7 +3196,7 @@ let html = template("06.art", {
 JSON.parse(data).具体数据
 ```
 
-![image-20220430151601850](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220430151601850.png)
+![image-20220430151601850](https://s2.loli.net/2022/12/09/3MOfKLZ4BY6rbW9.png)
 
 ### 隐藏元素控件
 

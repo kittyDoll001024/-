@@ -6,7 +6,7 @@
 
 它将网页划分成一个个网格，可以任意组合不同的网格，做出各种各样的布局。
 
-![image-20220324145540322](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220324145540322.png)
+![image-20220324145540322.png](https://s2.loli.net/2022/12/09/vnqMZ7DCoaQ9UGi.png)
 
 Grid 布局与 [Flex 布局](https://www.ruanyifeng.com/blog/2015/07/flex-grammar.html)有一定的相似性，都可以指定容器内部多个项目的位置。但是，它们也存在重大区别。
 
@@ -34,7 +34,7 @@ Flex 布局是轴线布局，只能指定"项目"针对轴线的位置，可以�
 
 容器里面的水平区域称为"行"（row），垂直区域称为"列"（column）
 
-![image-20220324145858074](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220324145858074.png)
+![image-20220324145858074](https://s2.loli.net/2022/12/09/EeJNm2Prc8gYvuy.png)
 
 上图中，水平的深色区域就是"行"，垂直的深色区域就是"列"。
 
@@ -48,7 +48,7 @@ Flex 布局是轴线布局，只能指定"项目"针对轴线的位置，可以�
 
 划分网格的线，称为"网格线"（grid line）。水平网格线划分出行，垂直网格线划分出列。
 
-正常情况下，`n`行有`n + 1`根水平网格线，`m`列有`m + 1`根垂直网格线，比如三行就有四根水平网格线。![image-20220324145958366](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220324145958366.png)
+正常情况下，`n`行有`n + 1`根水平网格线，`m`列有`m + 1`根垂直网格线，比如三行就有四根水平网格线。![image-20220324145958366](https://s2.loli.net/2022/12/09/tPCWn5Y3rMTGHhf.png)
 
 上图是一个 4 x 4 的网格，共有5根水平网格线和5根垂直网格线。
 

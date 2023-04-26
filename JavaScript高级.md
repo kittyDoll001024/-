@@ -436,7 +436,7 @@ console.log(stringDotProxy[0]);
 
 下面通过代理实现`vue` 等前端框架的数据绑定特性特性。
 
-![Untitled](https://doc.houdunren.com/assets/img/Untitled-5190245.5087f5bc.gif)
+![Untitled](https://s2.loli.net/2022/12/09/zyvoqeDiprtP8TH.gif)
 
 ```javascript
 <body>
@@ -479,7 +479,7 @@ let view = new View().run();
 
 #### 表单验证
 
-![Untitled](https://doc.houdunren.com/assets/img/Untitled-1059910.07b17933.gif)
+![Untitled](https://s2.loli.net/2022/12/09/GfDRITd2s1H7gtc.gif)
 
 ```javascript
 <style>
@@ -708,7 +708,7 @@ console.log(hd);
 
 默认情况下创建的对象都有原型
 
-![image-20191205163626698](https://doc.houdunren.com/assets/img/image-20191205163626698.7576e2ba.png)
+![image-20191205163626698](https://s2.loli.net/2022/12/09/kl8pqKu7tCzW4jZ.png)
 
 以下x、y的原型都为元对象Object，即`JS`中的根对象
 
@@ -720,7 +720,7 @@ console.log(Object.getPrototypeOf(x) == Object.getPrototypeOf(y)); //true
 
 我们也可以创建一个极简对象（纯数据字典对象）没有原型（原型为null)
 
-![image-20191205163809670](https://doc.houdunren.com/assets/img/image-20191205163809670.f473ca14.png)
+![image-20191205163809670](https://s2.loli.net/2022/12/09/51BdSETiC7jLZar.png)
 
 ```javascript
 let hd = { name: 3 };
@@ -756,7 +756,7 @@ console.log(User.prototype == hd.__proto__);
 
 下面是原型关系分析，与方法继承的示例
 
-![image-20191208003927158](https://doc.houdunren.com/assets/img/image-20191208003927158.2f7f84ab.png)
+![image-20191208003927158](https://s2.loli.net/2022/12/09/iuSZNcmU18wkEf4.png)
 
 ```javascript
 let hd = new Object();
@@ -777,7 +777,7 @@ User.show();
 - 构造函数拥有原型
 - 创建对象时构造函数把原型赋予对象
 
-![image-20191010023843179](https://doc.houdunren.com/assets/img/image-20191010023843179.58edd59f.png)
+![image-20191010023843179](https://s2.loli.net/2022/12/09/YfrX9W7JOwLI8pM.png)
 
 ```javascript
 function User() {}
@@ -787,7 +787,7 @@ console.log(xj.__proto__ == User.prototype);
 
 下面使用数组会产生多级继承即原型链
 
-![image-20191120174145258](https://doc.houdunren.com/assets/img/image-20191120174145258.aec2cd6d.png)
+![image-20191120174145258](https://s2.loli.net/2022/12/09/TBiVIAXYrlHofLh.png)
 
 ```javascript
 let hd = [];
@@ -845,7 +845,7 @@ console.log(xj);
 
 通过引用类型的原型，继承另一个引用类型的属性与方法，这就是实现继承的步骤。
 
-<img src="https://doc.houdunren.com/assets/img/image-20191010012103033.3540a960.png" alt="image-20191010012103033" style="zoom:67%;" />
+<img src="https://s2.loli.net/2022/12/09/gb8xi4WPNCL6dws.png" alt="image-20191010012103033" style="zoom:67%;" />
 
 使用`Object.setPrototypeOf` 可设置对象的原型，下面的示例中继承关系为 obj>hd>cms。
 
@@ -1122,7 +1122,7 @@ console.log('后盾人每天不断视频教程'.truncate(3)); //后盾人...
 
 使用`Object.create`创建一个新对象时使用现有对象做为新对象的原型对象
 
-![image-20191205153548377](https://doc.houdunren.com/assets/img/image-20191205153548377.2d54d9db.png)
+![image-20191205153548377](https://s2.loli.net/2022/12/09/1bp5Tqsd3Mt7fzO.png)
 
 使用`Object.create` 设置对象原型
 
@@ -1261,7 +1261,7 @@ console.log(lisi.hasOwnProperty("name"));
 
 下面使用`Object.create` 创建对象，做为`Admin、Member`的原型对象来实现继承。
 
-<img src="https://doc.houdunren.com/assets/img/image-20191120214826701.a67be927.png" alt="image-20191120214826701" style="zoom:67%;" />
+<img src="https://s2.loli.net/2022/12/09/T9An52ohYrNpEta.png" alt="image-20191120214826701" style="zoom:67%;" />
 
 ```javascript
 function User() {}
@@ -1645,7 +1645,7 @@ hd.ajax(); //请求后台
 
 #### 实例操作
 
-![Untitled](https://doc.houdunren.com/assets/img/Untitled.71754c70.gif)
+![Untitled](https://s2.loli.net/2022/12/09/jgJ2QK5MsFyBhWr.gif)
 
 ```javascript
 <style>
@@ -1867,7 +1867,7 @@ console.log(typeof User); //function
 
 `constructor` 用于定义函数代码，下面是与普通函数的对比，结构是一致的
 
-![image-20191211115419286](https://doc.houdunren.com/assets/img/image-20191211115419286.27a4a5f1.png)
+![image-20191211115419286](https://s2.loli.net/2022/12/09/LEJYqI894BiNb6X.png)
 
 ```javascript
 class User {
@@ -1889,7 +1889,7 @@ console.log(Hd == Hd.prototype.constructor); //true
 
 在类中定义的方法也保存在函数原型中
 
-![image-20191211120949421](https://doc.houdunren.com/assets/img/image-20191211120949421.72c0f269.png)
+![image-20191211120949421](https://s2.loli.net/2022/12/09/rLqIGJwCXWmsUY4.png)
 
 ```javascript
 class User {
@@ -2411,7 +2411,7 @@ console.log(hd);
 
 `class` 继承内部使用原型继承
 
-<img src="https://doc.houdunren.com/assets/img/image-20191211135724814.56b153b5.png" alt="image-20191211135724814" style="zoom:67%;" />
+<img src="https://s2.loli.net/2022/12/09/sELQlyfACWhDSH7.png" alt="image-20191211135724814" style="zoom:67%;" />
 
 ```javascript
 class User {
@@ -2929,7 +2929,7 @@ let hd = new Lesson(data);
 console.log(hd.max("price"));
 ```
 
-#### 实例操作![Untitled](https://doc.houdunren.com/assets/img/Untitled-6121570.ae02deb6.gif)
+#### 实例操作![Untitled](https://s2.loli.net/2022/12/09/HbRxIhAfndN45qs.gif)
 
 ```javascript
 <style>
@@ -4199,7 +4199,7 @@ Promise包含`pending`、`fulfilled`、`rejected`三种状态
 
 promise 是队列状态，就像体育中的接力赛，或多米诺骨牌游戏，状态一直向后传递，当然其中的任何一个promise也可以改变状态。
 
-<img src="https://doc.houdunren.com/assets/img/image-20191224100431808.4e777bac.png" alt="image-20191224100431808" style="zoom:67%;" />
+<img src="https://s2.loli.net/2022/12/09/8tSgMYUmxwHOB19.png" alt="image-20191224100431808" style="zoom:67%;" />
 
 promise 没有使用 `resolve` 或 `reject` 更改状态时，状态为 `pending`
 
@@ -5186,7 +5186,7 @@ timeout(3000)
 
 下面是对同一个 `promise` 的多个 `then` ，每个`then` 都得到了同一个promise 结果，这不是链式操作，实际使用意义不大。
 
-![image-20191223201319405](https://doc.houdunren.com/assets/img/image-20191223201319405.03e9ad3b.png)
+![image-20191223201319405](https://s2.loli.net/2022/12/09/btgZHGrKL2YoXSl.png)
 
 ```javascript
 const promise = new Promise((resolve, reject) => {
@@ -6201,7 +6201,7 @@ promise2
 7. 此时微任务队列中已无任务，然后从宏任务队列中读取任务，发现之后将其放到主线程中
 8. 执行完之后循环，如果所有的任务队列都没有任务那么将进入休眠状态
 
-<img src="https://doc.houdunren.com/assets/img/image-20191227151316924.65fe4da0.png" alt="image-20191227151316924" style="zoom:80%;" />
+<img src="https://s2.loli.net/2022/12/09/rePVIStcN5buq9x.png" alt="image-20191227151316924" style="zoom:80%;" />
 
 #### 脚本加载
 

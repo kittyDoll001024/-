@@ -4,7 +4,7 @@
 
 **Vuex 是一个专为 Vue.js 应用程序开的发的(状态管理模式+库)。它采用集中式存储管理应用所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。**
 
-![image-20220307141011958](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220307141011958.png)
+![image-20220307141011958](https://s2.loli.net/2022/12/09/GEDSmXAwf7Vc4Wj.png)
 
 **State：状态管理**
 
@@ -19,7 +19,7 @@
 - 因此我们把多个组件之间共享的状态抽取出来，以一个全局的模式管理。
 - 这样通过定义和状态隔离的管理来强制的维持视图与状态之间的独立性，代码将会变的更结构化而且易维护。
 
-![		](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220307143317392.png)
+![		](https://s2.loli.net/2022/12/09/En5w4LPzcforsZU.png)
 
 **Vue Components：视图层**
 
@@ -48,8 +48,6 @@
 1.   `npm view vuex versions --json`  （ 查看vuex的所有版本 ）
 2.   ` npm install vuex@3.6.2 --save`  （ 指定版本安装 ）
 
-
-
 也有可能是有 npm 的 https 的认证
 
 那我们需要执行这样一段代码来取消npm的[https](https://so.csdn.net/so/search?q=https&spm=1001.2101.3001.7020)认证
@@ -59,8 +57,6 @@
 在执行安装 vuex 的命令
 
 `npm install vuex --save`
-
-
 
 ## state
 
@@ -88,7 +84,7 @@
 
 - 在计算属性中使用 mapState 
 
-  - ```` 
+  - ```` javascript
     computed: mapState({
     	// 抽取 state 状态的几种方式
     	属性名称: state => state.状态名
@@ -107,7 +103,7 @@
 
   - **使用展开运算符**
 
-  - ````
+  - ````javascript
     computed: {
     	...mapState({
     		属性名称: state => state.状态名
@@ -118,7 +114,7 @@
     **当映射的计算属性的名称与 state 的子节点名称相同时，我们也可以给 `mapState` 传一个字符串数组。**
   
   
-  - ````
+  - ````javascript
     computed: {
     	...mapState([
     	  // 映射 this.count 为 store.state.count
@@ -134,7 +130,7 @@
 
 语法结构
 
-- ````
+- ````javascript
   // Vuex 中
   const getters = {
   	属性名称(state) {
@@ -156,14 +152,14 @@
 
   - **注：geeters 在通过属性访问时是作为 Vue 的响应式系统的一部分缓存其中的。**
 
-  - ````
+  - ````javascript
     属性名称(state, getters) {
     	getters.状态名.length
     }
 
 - **在 getters 无法传入第三个参数的情况下我们则让他返回一个函数，用函数来进行传值**
 
-  - ````
+  - ````javascript
     // 可读性太差
     const getters = {
     	属性名称: (state) => (函数传入参数) {
@@ -187,7 +183,7 @@
 
 - 在计算属性中使用 mapGetters 
 
-  - ```` 
+  - ```` javascript
     computed: {
     	...mapgetters([
     		'属性名称'
@@ -210,7 +206,7 @@
 
   - **如果不通过提交 mutations 来修改状态，则不会被 mutations 的插件 Devtools 监听到，在多个组件使用同一个状态时，如果状态被某个组件修改出现错误，就能不及时的发现错误。**
 
-  - ````
+  - ````javascript
     const store = {
     	mutations: {
     		// 会自动传入一个参数 
@@ -225,7 +221,7 @@
 
   - **在这里如果你不进行异步操作，可直接使用 commit 来提交 mutations，绕过提交 actions 这一步**
 
-  - ````
+  - ````javascript
     methods: {
     	属性名称() {
     		this.store.commit("提交名称")
@@ -236,7 +232,7 @@
 
   - **向 store.commit 传入额外的参数叫做提交载荷，载荷一般是一个 对象的形式(在只有一个参数的情况下也可以不使用对象的形式,但是推荐使用以对象的形式)**
 
-  - ````
+  - ````javascript
     // template中
     methods: {
     	属性名称(payload) {
@@ -253,7 +249,7 @@
 
 - **以对象的风格提交载荷**
 
-  - ````
+  - ````javascript
     // template中
     methods: {
     	属性名称(payload) {
@@ -277,12 +273,12 @@
 
   - 先创建 mutatuin-types.js 文件
 
-  - ````
+  - ````javascript
     export const 常量名称 = "vuex属性名"
 
   - vuex 中
 
-  - ````
+  - ````javascript
     // 导入常量
     import { 常量名称 } from "./mutation-types"
     
@@ -296,7 +292,7 @@
 
   - template 中
 
-  - ````
+  - ````javascript
     // 导入常量
     import { 常量名称 } from "./mutation-types"
     
@@ -312,7 +308,7 @@
 
   - `import { mapMutations } from "vuex"`
 
-  - ````
+  - ````javascript
     methods: {
     	...mapMutations([
     		// 将 `this.increment()` 映射为 `this.$store.commit('increment')`
@@ -327,7 +323,7 @@
 
   - 更换名字，用对象的形式
 
-  - ````
+  - ````javascript
     methods: {
     	...mapMutations({
     		// 将 `this.add()` 映射为 `this.$store.commit('increment')`
@@ -337,7 +333,7 @@
 
 - 响应式修改方式
   - vuex 的 state 在创建的时候就已经初始化好了
-  - ![image-20220308165436147](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220308165436147.png)
+  - ![image-20220308165436147](https://s2.loli.net/2022/12/09/PvYfmoEGTwnjXKD.png)
 
 ## Actions
 
@@ -347,7 +343,7 @@
 
   - Action 函数接受一个与 store 实例具有相同方法和属性的 context 对象，因此你可以调用 `context.commit` 提交一个 mutation，或者通过 `context.state` 和 `context.getters` 来获取 state 和 getters。
 
-  - ````
+  - ````javascript
     // vuex中
     const mutations = {
     	uptateInfo(state) {
@@ -374,7 +370,7 @@
 
 - **Actions 支持同样的载荷方式和对象方式进行分发**
 
-  - ````
+  - ````javascript
     methods: {
     	// 第一种
     	属性名() {
@@ -394,7 +390,7 @@
 
   - **组合 Action**
 
-  - ````
+  - ````javascript
     const actions = {
     	aUpdateInfo(context, payload) {
     		return new Promise((resolve, reject) => {
@@ -421,7 +417,7 @@
   - 先构建 mapACtions 辅助函数
   - `import { mapActions } from "vuex"`
 
-  - ````
+  - ````javascript
     methods: {
     	...mapActions([
     		// 将 `this.increment()` 映射为 `this.$store.dispatch('increment')`
@@ -434,7 +430,7 @@
 
   - 更换名字，用对象的形式
 
-  - ````
+  - ````javascript
     methods: {
     	...mapActions({
     		// 将 `this.add()` 映射为 `this.$store.dispatch('increment')`
@@ -450,7 +446,7 @@
 
 - **因此 Vuex 允许把 store 分割成模块(modules)而每个模块都拥有着自己的  state、mutations、actions、getters  **
 
-  - ````
+  - ````javascript
     export default new Vuex.Store({
       // 需要先在 Store 注册
       modules: {
@@ -470,7 +466,7 @@
 
 - **模块的局部状态**
 
-  - ````
+  - ````javascript
     const modulesA = {
     	// mutations、getters 接收的第一个参数，就是局部状态的 state
     	state: {name: "小嘎吧"},
