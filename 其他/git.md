@@ -448,5 +448,10 @@ git push -u origin master
 # 从远端库更新内容到本地
 # 如果push的时候，本地和文件和远端文件有冲突，就要先pull、然后手动解决冲突，才能继续push
 git pull
+
+# 终止合并
+git merge --abort
+# 重置合并
+git reset --merge
 ```
 

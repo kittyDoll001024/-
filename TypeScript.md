@@ -415,7 +415,7 @@ npm i -D less less-loader css-loader style-loader
 npm i -D postcss postcss-loader postcss-preset-env
 ```
 
-```javascript
+```js
 // 引入路径配置包
 const path = require("path")
 // 引入 html 插件
@@ -530,6 +530,127 @@ module.exports = {
 }
 ```
 
+## 类型声明文件
+
+### 概述
+
+今天几乎所有的 `JavaScript` 应用都会引入许多第三方库来完成任务需求
+
+这些第三方库不管是否是用 `TS` 编写的，最终都要编译成 `JS` 代码，才能发布给开发者使用
+
+我们知道是 `TS` 提供了类型，才有了代码提示和类型保护等机制
+
+但在项目开发中使用第三方库时，你会发现它们几乎都有相应的 `TS` 类型，这些类型是怎么来的呢？类型声明文件
+
+类型声明文件：用来为已存在的 `JS` 库提供类型信息
+
+这样在 `TS` 项目中使用这些库时，就像用 `TS` 一样，都会有代码提示、类型保护等机制了
+
+1. `TS` 的两种文件类型
+2. 类型声明文件的使用说明
+
+### TS 中的两种文件类型
+
+`TS` 中有两种文件类型：
+
+1. `.ts` 文件
+2. `.d.ts` 文件
+
+- `.ts` 文件：
+  1. 既包含类型信息又可执行代码
+  2. 可以被编译为 `.js` 文件，然后，执行代码
+  3. 用途：编写程序代码的地方
+- `.d.ts` 文件：
+  1. 只包含类型信息的类型声明文件
+  2. 不会生成 `.js` 文件，仅用于提供类型信息
+  3. 用途：为 `JS` 提供类型信息
+
+总结：`.ts` 是 `implementation` (代码实现文件)；`.d.ts` 是 `declaration` (类型声明文件)
+
+### 类型声明文件的使用说明
+
+在使用 `TS` 开发项目时，类型声明文件的使用包括以下两种方式：
+
+1. 使用已有的类型声明文件
+2. 创建自己的类型声明文件
+
+> 使用已有的类型声明文件：
+
+1. 内置类型声明文件
+2. 第三方库的类型声明文件
+
+内置类型声明文件：`TS` 为 `JS` 运行时可用的所有标准化内置 `API` 都提供了声明文件
+
+在使用数组时，数组所有方法都会又相应的代码提示一级类型信息：
+
+![image-20230624161456987](https://s2.loli.net/2023/06/24/eL4mJnckdxpItyV.png)
+
+实际上这都是 `TS` 提供的内置类型声明文件
+
+例如：
+
+查看 `forEach` 方法的类型声明，在 `lib.es5.d.ts` 类型声明文件中
+
+像 `windows/document` 等 BOM、DOM API 也都有相应的类型声明 (lib.dom.d.ts)
+
+> 使用第三方库
+
+第三方库的类型声明文件：目前，几乎所有常用的第三方库都有相应的类型声明文件。
+
+第三方库 的 类型声明文件有两种存在形式：
+
+1. 库自带 类型声明文件
+
+   ![image-20230629130722506](https://s2.loli.net/2023/06/29/5pBkT862hyCQeHu.png)
+
+`注：这种情况下， TS 就会自动加载库自己的类型声明文件，已提供该库的类型声明 `
+
+2. 由 `DefinitelyType` 提供
+
+- `DefinitelyType` 是一个 `GitHub` 仓库，用来 提供高质量 `typescript` 类型声明。
+- 可以通过 `npm/yarn` 来下载该仓库 提供的 `TS` 类型声明包，这些包的名称格式为：`@type/*`
+- 例如：`@types/react、@types/loadsh` 等
+- 在实际项目开发时，如果 你使用的第三方库美哟自带的声明文件，`Vscode` 会给出明确的提示
+
+![image-20230629130152488](https://s2.loli.net/2023/06/29/McnKNvEmxwp8oWI.png)
+
+![image-20230629130217401](https://s2.loli.net/2023/06/29/d5ph2QVYZ9UjTe3.png)
+
+![image-20230629130237524](https://s2.loli.net/2023/06/29/mVAegSburwPLpTk.png)
+
+当安装 `@types/*` 类型声明包后，TS 也会自动加载该类型声明包，以提供库的类型声明。
+
+> 创建自己的类型声明文件
+
+1. 项目内共享类型
+
+- 项目内共享类型：如果多个 `.ts` 文件中都用到同一个类型，此时可以创建 `.d.ts` 文件提供该类型，实现类型共享。
+
+操作步骤：
+
+- 创建 `index.d.ts` 类型声明文件
+- 创建需要共享的类型，并导出 (TS 中的类型可以使用 `import/export` 实现模块化)
+- 在需要使用共享的 `.ts` 文件中，通过 `import` 导入即可 (`.d.ts` 后缀导入时，直接省略)
+
+2. 为已有 `JS` 文件提供类型声明：
+
+   1. 在将 `JS` 项目迁移到 `TS` 项目时，为了让已有的 `.js` 文件有类型声明
+   2. 成为库作者，创建库给其他人使用
+
+   `注:` 类型声明文件的编写与模块化方式相关，不同的模块化方式有不同的写法。但由于历史原因，`JS` 模块化的发展经历过多种变化 `(AND、CommonJS、UMD、ESModule)等` ，而 `TS` 支持各种模块化形式的类型声明。这就导致，类型声明文件相关内容又多又杂。
+
+   `说明:` `TS` 项目中也可以使用 `.js` 文件
+
+   `说明:` 在导入 `.js` 文件时，`TS` 会自动加载与 `.js` 同名的 `.d.js` 文件以提供类型声明。
+
+   `declare` 关键字：
+
+   - 用于类型声明，为其他地方 (比如，`.js` 文件) 已存在的变量声明类型，而不是创建一个新的变量。
+     1. 对于 `type、interface` 等这些明确就是 `TS` 类型的 (只能在 `TS` 中使用的)，可以省略 `declare` 关键字。
+     2. 对于 `let、function` 等具有双重含义 (在 `JS、TS` 中都能使用)，应该使用 `declare` 关键字，明确指定从此处用于类型声明。
+
+   ![image-20230705163130950](https://s2.loli.net/2023/07/05/LXb8NJnl1ZsAov3.png)
+
 #  基础类型
 
 TypeScript中会有新的一些数据类型，也包含了我们js中的 `number string ....`
@@ -549,6 +670,8 @@ let num: number // 这个变量被指定为数字类型；其他类型同理
 > TS 也可以自动根据当前的值去判断类型，再次赋值时会跟当前的的值类型进行比对，不是同一类型将会报错
 
 ### 自动判断类型
+
+函数参数不建议使用类型推断
 
 #### 字符串
 
@@ -725,6 +848,8 @@ hd.push('houdunren','后盾人')
 
 元组就是固定长度的数值
 
+元组类型是另一种类型的数组，它确切地知道包含了多少个元素，以及特定索引对应的类型
+
 ```typescript
 let hd: [string, string]  // 只能有两个值，且是字符类型
 ```
@@ -870,6 +995,7 @@ unknown 类型也是顶部类型这与 any 一样
 - unknown 用于表示未知的类型
 - 与 any 的区别是 any 不进行 TS 校验，unknown 类型要安全得多，会进行 TS 的类型检查
 - 使用 unknown 类型时一般需要 as **类型断言**来转换类型；而 any 可以赋值任意变量
+- `unknown` 没有办法读取任何属性，方法也不能调用
 
 **unknown 赋值时要求明确类型**
 
@@ -1049,6 +1175,258 @@ hd = undefined
 console.log(hd) // Type 'undefined' is not assignable to type 'number'
 ```
 
+### 类型断言
+
+有时候你会比 `TS` 更加明确一个值的类型，此时，可以使用类型断言来指定更具体的类型
+
+例：
+
+```html
+<a href="#" id="line"></a>
+```
+
+```typescript
+const aLink = document.getElementById("link")
+```
+
+`注` `getElementById` 方法返回值的类型是 `HTMLElement` ，该类型只包含所有标签公共的属性或方法，不包含 a 标签特有的 href 等属性。
+
+因此这个类型太宽泛，无法操作 href 等 a 标签特有的属性方法。
+
+这时候就需要使用类型断言指定更加具体的类型
+
+使用类型断言
+
+```typescript
+const aLink = document.getElementById("link") as HTMLAnchorElement
+```
+
+1. 使用 `as` 关键字实现类型断言
+2. 关键字 `as` 后面的类型是一个更加具体的类型 `(HTMLAnchorElement 是 HTMLElement 的子类型)`
+3. 通过类型断言， `aLink` 的类型变得更加具体。
+
+另一种断言写法 (不推荐)
+
+此类型写法与 `react` 中的语法类型会有冲突
+
+```typescript
+const aLink = <HTMLAnchorElement>document.getElementById("link")
+```
+
+如何查看元素类型
+
+![image-20230619112545622](https://s2.loli.net/2023/06/19/Pkoy1COfZ4bXugW.png)
+
+![image-20230619112627363](https://s2.loli.net/2023/06/19/UNOSWq1o6KsByHJ.png)
+
+![image-20230619112650426](https://s2.loli.net/2023/06/19/G4LnYTcvgW3H2qB.png)
+
+### 字面量类型
+
+使用模式：字面量类型配合联合类型一起使用
+
+使用场景：用来表示一组明确的可选值列表
+
+```typescript
+const direction: "up" | "down" | "left" | "right"
+direction = "down"
+direction = "沐沐汐"  // 报错
+```
+
+参数 `direction` 的值只能是 `"up" | "down" | "left" | "right"` 中任意一个
+
+优势：相比于 `string` 类型，使用字面量类型更加精确、严谨
+
+### typeof
+
+`TS` 提供了一个和 `JS` 相同的操作符，两者的执行环境不同效果也不同
+
+`TS` 中的 `typeof` ：可以在类型上下文中引用变量或属性的类型 (类型查询)。
+
+使用场景：根据已有变量的值，获取该值的类型，来简化类型书写。
+
+```typescript
+let obj = { x: 1, y: 2 };
+function formatPoint(point: typeof obj) {}
+formatPoint({x: 2, y: 1})
+```
+
+- 使用 `typeof` 操作符来获取变量 `p` 的类型，结果与第一种 (对象字面量的类型) 相同。
+- `typeof` 出现在类型注解的位置 (参数名称的冒号后面) 所处的环境就在类型上下文 (区别于 `JS` 代码)。
+- `注` ：`typeof` 只能用来查询变量或属性的类型，无法查询其他形式的类型 (例如：函数调用类型)。
+
+### 交叉类型
+
+交叉类型 (&)：功能类似于接口继承，用于组合多个类型为一个类型 (常用于对象类型)
+
+- 使用交叉类型后，新的类型 `PersonDetail` 就同事具备了 `Person` 和 `Contact` 的所有属性类型
+
+```typescript
+interface Person {
+  name: string
+  say() => boolean
+}
+
+interface Contact {
+  age: number
+}
+
+type PersonDetail = Person & Contact
+
+let obj: PersonDetail = {
+  name: "张思睿",
+  age: 18,
+  say() { return false }
+}
+```
+
+### 交叉类型和接口继承的区别
+
+- 相同点：都可以实现对象类型的组合
+- 不同点：两种方式实现类型组合时，对于同名属性之间，处理类型冲突的方式不同
+
+交叉类型
+
+```typescript
+interface A {
+  fn: (value: number) => number
+}
+
+interface B {
+  fn: (value: string) => string
+}
+
+type C = A & B
+
+let c: C = {
+  fn(value) { return value }  
+}
+
+c.fn(1)
+c.fn("1")
+c.fn(false)  // error
+```
+
+### 索引签名类型
+
+绝大多数情况下，我们都可以在使用对象前就确定对象的结构，并为对象添加准确的类型
+
+当无法确定对象中有哪些属性 (或者说对象中可以出现任意多个属性)，此时，就用到索引签名类型
+
+```typescript
+interface AnyObject<T> {
+  [key: string]: T
+}
+
+let obj: AnyObject<number> = {
+  a: 123
+}
+```
+
+- 使用 `[key: string]` 来约束该接口中允许出现的属性名称。表示只要是 `string` 类型的属性名称，都可以出现在对象中。
+- 这样，对象中就可以出现任意多个属性
+- `key` 只是一个占位符，可以换成任意合法边变量名称
+- 隐藏知识点：`JS` 中对象 `({})` 的键是 `string` 类型的 
+
+在 `JS` 中数组是一类特殊的对象，特殊在数组的键 (索引) 是数值类型
+
+并且，数组也可以出现任意多个元素。所以，在数组对应的泛型接口中，也用到了索引签名类型
+
+```typescript
+interface MyArray<T> {
+  [n: number]: T
+}
+
+let arr: MyArray<number> = [1, 2, 3]
+```
+
+### 映射类型
+
+映射类型：基于旧类型创建新类型 (对象类型)，减少重复、提升开发效率
+
+例如：类型 `PropKeys` 有 `x/y/z` ，另一个类型 `Type1` 中也有 `x/y/z` 
+
+```typescript
+type PropKeys = "x" | "y" | "z"
+type Type1 = { x: number, y: number, z: number }
+```
+
+这样写没错，但 `x/y/z` 重复写入。这时候旧可以使用映射类型来进行简化
+
+```typescript
+type PropKeys = "x" | "y" | "z"
+
+type Type2<T> = { [key in PropKeys]: T }
+```
+
+- 映射类型是基于索引签名类型的，所以，改语法类似于索引签名类型，也使用 `[]`
+- `key in PropKeys` 表示 `key` 可以是 `PropKeys` 联合类型中的任意一个，类似于 `for in`
+- 使用映射类型创建的新对象类型 `Type2` 和类型 `Type1` 结构完全相同
+- **注：映射类型只能在类型别名中使用，不能在接口中使用**
+
+映射类型除了根据联合类型创建新类型外，还可以根据对象类型来创建
+
+```typescript
+type Props = { a: number, b: string, c: boolean }
+
+type Type3<T> = { [key in keyof Props]: T }
+```
+
+执行 `keyof Props` 获取到对象类型 `Props` 中所有键的联合类型
+
+> 泛型工具类型都是基于映射类型实现的
+
+例如：`Partial` 的实现
+
+```typescript
+type Props = { a: number, b: string, c: boolean }
+
+type Partial<T> = {
+  [P in keyof T]?: T[P]
+}
+
+type PartialProps = Partial<Props>
+```
+
+> 索引查询类型
+
+用来查询属性的类型
+
+```typescript
+type Props = { a: number, b: string, c: boolean }
+
+type TypeA = Props["a"]
+```
+
+- `Props["a"]` 表示查询类型 `Props` 中属性 "a" 对应的类型 `number` 。所以，`TypeA` 的类型为 `number`
+- `[]` 中的属性必须存在于被查询类型中，否则就会报错
+
+![image-20230624152111108](https://s2.loli.net/2023/06/24/UTOnB9xVwQKRXvH.png)
+
+> 查询多个索引类型
+
+索引查询类型：同事查询多个索引类型
+
+```typescript
+type Props = { a: number, b: string, c: boolean }
+```
+
+使用字符串字面量的联合类型，获取属性 a 和 b 对应的类型
+
+```typescript
+type TypeA = Props["a" | "b"]
+```
+
+![image-20230624152852993](https://s2.loli.net/2023/06/24/zw7XINdWH3T1sxZ.png)
+
+使用 `keyof` 操作符获取 `Props` 中所有键对应的类型
+
+```typescript
+type TypeB = Props[ketof Props]
+```
+
+![image-20230624153042013](https://s2.loli.net/2023/06/24/shiTRAdwBvl24tr.png)
+
 ## 函数
 
 下面我们来查看ts中函数的使用
@@ -1089,13 +1467,43 @@ fun = function(x, y):number {
 TS 可以指定函数参数的类型，也可以指定函数返回值的类型
 
 ```typescript
-function sum(a: number, b: number):number {  // 函数的返回值被指定为数值类型
+function sum(a: number, b: number): number {  // 函数的返回值被指定为数值类型
   return a + b
 }
 sum(123, 456) // 函数参数被指定为数值类型
 ```
 
+ 函数没有返回值可以设置为 `void`
+
+```typescript
+function fn(name: string): void {
+  console.log(name)
+}
+fn("沐沐汐")
+```
+
+函数的可选参数
+
+在可传可不传的参数名称后面添加问号
+
+```typescript
+function mySlice(start?: number, end?: number): void {}
+```
+
+`注` 可选参数只能出现在参数列表的最后，也就是说可选参数后面不能在出现必选参数
+
 ## 类
+
+需要为构造函数指定类型注解，否则会被隐式推断为 `any` ，构造函数不需要返回值类型
+
+```typescript
+class Person {
+  constructor(name: string, age: number) {}
+}
+new Person("沐沐汐", 18)
+```
+
+
 
 ### 类的简介
 
@@ -1175,6 +1583,11 @@ console.log(dog);
 ```
 
 ### 继承
+
+类继承的两种方式：
+
+- `extends` 继承父类
+- `implements` 实现接口
 
 ```typescript
 (function () {
@@ -1519,7 +1932,9 @@ class Person {
 
 ### 泛型
 
-在定义函数或是类时，如果遇到类型不明确就可以使用泛型
+泛型是可以在保证类型安全前提下，让函数等与**多种类型**一起工作，从而实现复用，常用于函数、接口、class中。
+
+在定义函数或是类时，如果遇到类型不明确就可以使用泛型。
 
 ```typescript
 function fn<T>(a: T): T {
@@ -1552,5 +1967,448 @@ class MyClass<T> {
   constructor(name: T) { }
 }
 let mc = new MyClass<string>("吸收系数")
+```
+
+> 当不传泛型类型时则推断为字面量类型
+
+```typescript
+function fn<T>(x: T):T {
+  return x
+}
+fn(123)
+// 泛型 T 则是 123
+```
+
+> 泛型约束
+
+默认情况下，泛型函数类型变量 `<T>` 可以代码多个类型，这导致无法访问任何属性
+
+例：
+
+```typescript
+function len<T>(value: T): T {
+  console.log(value.length)  // error
+  return value
+}
+```
+
+`<T>` 可以代表任意类型，无法保证一定存在 `length` 属性，比如 `number` 类型就没有 `length` 。此时，就需要为泛型添加约束来收缩类型 (缩窄类型取值范围)
+
+添加泛型约束收缩类型，主要有以下两种方式
+
+1. 指定更加具体的类型
+
+```typescript
+function len<T>(value: T[]): T[] {
+  console.log(value.length)
+  return value
+}
+```
+
+2. 添加约束
+
+通过 `extends` 关键字使用该接口，为泛型 (类型变量) 添加约束
+
+该约束表示：传入的类型必须具有 `length` 属性
+
+`注` 传入的实参 (例如：数组) 只要有 `length` 属性即可，这也符合前面讲到的类型兼容性
+
+```typescript
+interface Len { length: number }
+
+function len<T extends Len>(value: T): T {
+  console.log(value.length)
+  return value
+}
+```
+
+泛型的类型变量可以有多个，并且类型变量之间还可以约束 (例如：第二个类型变量受第一个类型变量约束)。
+
+```typescript
+function getProp<T, K extends keyof T>(obj: T, key: K) {
+  return obj[key]
+}
+getProp({ name: "jack", age: 18 }, "name")
+```
+
+- `keyof` 关键字接收一个对象类型，生成其键名称 (可能是字符串或数字) 的联合类型
+- 本示例中 `keyof T` 实际上获取的是传入的对象所有键的联合类型，也就是 `"name" | "age"`
+- 类型变量 `K` 受 `T` 约束，可以理解为：
+  - `K` 只能是 `T` 所有键中的任意一个，或者说只能访问对象中存在的属性 
+
+> 泛型接口
+
+接口也可以配合泛型来使用，以增加其灵活性，增强其复用性。
+
+```typescript
+interface IdFunc<T> {
+  id: (value: T) => T
+  ids: () => T[]
+}
+
+let obj: IdFunc<number> = {
+  id(value) {
+    return 1
+  },
+  ids() {
+    return [1, 2, 3]
+  }
+}
+```
+
+- 接口的类型变量，对接口中所有其他成员可见，也就是接口中所有成员都可以使用类型变量
+- 使用泛型接口时，需要显式指定具体的类型
+
+> 泛型类
+
+类似于泛型接口，在 `class` 名称后面添加 `<类型变量>`，这个类就变成了泛型类
+
+- 在使用泛型类时在类函数中使用 `constructor` 可以省略 `<类型变量>` 类函数会自动推断出类型
+
+```typescript
+class GentericNumber<T> {
+  defaultValue: T
+  add: (x: T, y: T) => T
+  constructor(value) {}
+}
+
+const myNum = new GentericNumber(10)
+```
+
+![image-20230624102942905](https://s2.loli.net/2023/06/24/FNoQrJcS9PDYEHb.png)
+
+- 在不使用 `constructor` 时需要手动自定类型否则 `TS` 推断为 `unknown` 未知类型
+
+```typescript
+class GentericNumber<T> {
+  defaultValue: T
+  add: (x: T, y: T) => T
+}
+
+const myNum = new GentericNumber<number>()
+```
+
+- `TS` 自动推断
+
+![image-20230624103307769](https://s2.loli.net/2023/06/24/AdFnDTCVmyIGvgP.png)
+
+- 手动指定类型
+
+![image-20230624103345123](https://s2.loli.net/2023/06/24/VqpKSRFz7meaDdQ.png)
+
+> 泛型工具类型
+
+泛型工具类型：`TS` 内置了一些常用的工具类型，来简化 `TS` 中的一些常见操作。
+
+他们都是基于泛型实现的 (泛型使用于多种类型，更加通用)，并且是内置的，可以直接在代码中使用。
+
+常用工具类型：
+
+- `Partial<T>`
+
+  - 泛型工具类型 `Partial<T>` 用来构造 (创建) 一个类型，将 `<T>` 的所有属性设置为可选
+
+  ```typescript
+  interface Props {
+    id: string
+    children: number[]
+  }
+  
+  type PartialProps = Partial<Props>
+  ```
+
+  ![image-20230624105049500](https://s2.loli.net/2023/06/24/gRtQrPEj6m1aDeB.png)
+
+- `Readonly<T>`
+
+  - 泛型工具类型 `Readonly<T>` 用来构造一个类型，将 `<T>` 的所有属性都设置为 `readonly` (只读) 
+
+  ```typescript
+  interface Props {
+    id: string
+    children: number[]
+  }
+  
+  type ReadonlyProps = Readonly<Props>
+  
+  let props: ReadonlyProps = {
+    id: "1",
+    children: [1, 2, 3]
+  }
+  
+  props.id = "2"  // error
+  ```
+
+  ![image-20230624105907682](https://s2.loli.net/2023/06/24/cjhzruasS26F3Ak.png)
+
+- `Pick<T, K>`
+
+  - 泛型工具类型 `Pick<T, K>` 从 `<T>` 中选择一组属性来构造新类型
+
+  ```typescript
+  interface Props {
+    id: string
+    title: string
+    children: number[]
+  }
+  
+  type PickProps = Pick<Props, "id" | "children">
+  ```
+
+  ![image-20230624110621947](https://s2.loli.net/2023/06/24/XN4iLphFZradqtz.png)
+
+  - `Pick` 工具类型有两个类型变量：1. 表示选择谁的属性；2. 表示选择那几个属性
+  - 其中第二个类型变量，如果只选择一个则只传入该属性名即可
+  - 第二个类型变量传入的属性只能是第一个类型变量中存在的属性
+
+- `Record<K, T>`
+
+  - 泛型工具类型 `Record<K, T>` 构造一个对象类型，属性键为 `<K>` 属性类型为 `<T>`
+
+  ```typescript
+  type RecordObj = Record<"a" | "b" | "c", string[] | number[] | Object[]>
+  
+  let obj: RecordObj = {
+    a: ["1", "2", "3"],
+    b: [1, 2, 3],
+    c: [
+      	{ name: "张思睿", age: 18}, 
+        { name: "里斯", age: 19}
+    ]
+  }
+  ```
+
+  ![image-20230624112044745](https://s2.loli.net/2023/06/24/xeKaoh3lC9tw2X7.png)
+
+- `Record` 工具类型有两个类型变量：1. 表示对象有哪些属性；2. 表示对象属性的类型
+
+### 类型别名与接口的区别
+
+- 相同点：都可以给对象指定类型
+- 不同点：
+  - 接口，只能为对象指定类型
+  - 类型别名，不仅可以为对象指定类型，实际上可以为任意类型指定别名
+
+```typescript
+interface Iperson {
+  name: string,
+  age: number,
+  sayHi(): void
+}
+
+type Iperson = {
+  name: string,
+  age: number,
+  sayHi(): void
+}
+
+type myType = string
+```
+
+### 接口的继承
+
+两个接口之间有相同的属性或方法，可以将公共的属性或方法抽离出来，通过继承来实现复用
+
+```typescript
+interface Point2D { x: numbr, y: number }
+
+// 继承 
+interface Point3D extends Point2D {
+  z: number
+}
+
+// Point3D 继承了 Point2D 上的所有属性，并且声明了自己的 z 属性
+```
+
+### 类型兼容性
+
+两种类型系统：
+
+- 结构化类型系统
+- 标明类型系统
+
+**`TS` 采用的是结构化类型系统**，也叫做 `duck typing (鸭子类型)` ，类型检查关注的是值所具有的形状。
+
+也就是说，在结构类型系统中，如果两个对象具有相同的形状，则认为他们属于统一类型。
+
+```typescript
+class Point {x: number; y: number}
+class Point2D {x: number; y: number}
+const point: Point = new Point2D()
+```
+
+`注` 在结构化类型系统中，如果两个对象具有相同的形状，则认为它们属于统一类型，这种说法并不准确。
+
+更准确的说法：对于对象类型磊说， y 的成员至少于 x 相同，则 x 兼容 y （成员多的可以赋值成员少的）
+
+```typescript
+class Point {x: number; y: number;}
+class Point2D {x: number; y: number;  z: number}
+const point: Point = new Point2D()
+```
+
+除了 `class` 之外，`TS` 的其他类型也存在相互兼容的情况
+
+1. 接口兼容性
+2. 函数兼容性
+
+> 接口之间的兼容性，类似于 `class` 
+
+```typescript
+interface Point {
+  x: number
+  y: number
+}
+
+interface Point2D {
+  x: number
+  y: number
+}
+
+interface Point3D {
+  x: number
+  y: number
+  z: number
+}
+
+let p1: Point = { x: 3, y: 4 } 
+let p2: Point2D = { x: 3, y: 4 } 
+let p3: Point3D = { x: 3, y: 4, z: 5 }
+
+// true
+p1 = p2
+p2 = p1
+p1 = p3
+
+// false
+p3 = p1
+```
+
+`class` 和 `interface` 之间可以兼容
+
+```typescript
+class Point4D {
+  x: number
+  y: number
+  z: number
+}
+
+let p3: Point3D = new Point4D()
+```
+
+> 函数之间兼容性比较复杂，需要考虑：
+
+1. 参数个数
+2. 参数类型
+3. 返回值类型
+
+- 参数个数，参数多的兼容参数少的 (或者说，参数少的可以赋值给参数多的) 跟上面的正好相反
+
+```typescript
+type F1 = (a: number) => void
+type F2 = (a: number, b: number) => void
+
+let f1: F1 = (a) => {}
+let f2: F2 = (a, b) => {}
+
+// true
+f1 = f2
+
+// false
+f2 = f1
+```
+
+```typescript
+let arr = ["a", "b", "c"]
+arr.forEach(() => {})
+```
+
+- 数组 `forEach` 方法的第一个参数是回调函数，该示例中类型为：`(value: string, index: number, array: string[]) => void`
+- 在 `JS` 中省略用不到的函数参数实际上是很常见，这样的使用方式，促成了 `TS` 中函数类型之间的兼容性
+- 并且因为回调函数是由类型的，所以，`TS` 会自动推导出参数 `item/index/array` 的类型
+
+> 函数参数类型兼容性
+
+- 参数类型，相同位置的参数类型要相同 (原始类型) 或兼容 (对象类型)
+
+原始类型
+
+```typescript
+// 函数类型 F2 兼容函数类型 F1，因为 F1 和 F2 的第一个参数类型相同
+type F1 = (a: number) => void
+type F2 = (a: number) => void
+
+let f1: F1 = (a) => {}
+let f1: F1 = (a) => {}
+
+// true
+f1 = f2
+f2 = f1
+
+// false (不能将类型“number”分配给类型“string”)
+type F2 = (a: string) => void
+f1 = f2  // error
+```
+
+对象类型
+
+`注` 此处与前面的接口兼容性冲突
+
+将对象拆开，把每个属性看作一个个参数，则参数少的可以赋值给参数多的
+
+```typescript
+interface Ponit2D {
+  x: number
+  y: number
+}
+
+interface Ponit3D {
+  x: number
+  y: number
+  z: number
+}
+
+type F2 = (p: Point2D) => void
+type F3 = (p: Ponit3D) => void
+
+let f2: F2 = (a) => {}
+let f3: F3 = (b) => {}
+
+f3 = f2
+```
+
+> 函数返回值类型
+
+函数返回值类型，只关注返回值类型本身即可
+
+- 返回值类型是原始类型，此时两个类型要相同
+
+```typescript
+type F2 = () => string
+type F3 = () => string
+
+let f2: F2 = () => { return "" }
+let f3: F3 = () => { return "" }
+
+f2 = f3
+f3 = f2
+
+// error
+type F3 = () => number
+let f3: F3 = () => { return 1 }
+
+f2 = f3  // false
+```
+
+- 返回值类型是引用类型，此时成员多的可以赋值给成员少的
+
+```typescript
+type F2 = () => { name: string }
+type F3 = () => { name: string, age: number }
+
+let f2: F2 = () => { return { name: "沐沐汐" } }
+let f3: F3 = () => { return { name: "沐沐汐", age: 18 } }
+
+f2 = f3
 ```
 

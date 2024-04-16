@@ -323,6 +323,23 @@ Number.isInteger(3.0000000000000002) // true
   ````javascript
   let arr = new Array.of(6)
   ````
+  
+- 使用 `Array.of` 创建数组
+
+  - `Array.of` 的出现是为了弥补 `Array` 创建数组时的不足
+
+  ```javascript
+  // 使用 Array 创建
+  Array()  // []
+  Array(3)  // [, , ,]
+  Array(1, 2, 3)  // [1, 2, 3]
+  // 上述看到 Array 创建数组时如果参数不少于2才会返回由参数组成的新数组
+  
+  // 使用 Array.of 创建
+  Array.of()  // []
+  Array.of(3)  // [3]
+  Array.of(1, 2, 3)  // [1, 2, 3]
+  ```
 
 ### - 数组检测
 
@@ -373,22 +390,36 @@ Number.isInteger(3.0000000000000002) // true
 - 对象也可以转换为 数组
 
   ````javascript
-    let obj = {
-    	name: "憨憨",
-    	age: 21
-    	length: 2
-    }
-    Array.from(obj)
+  let obj = {
+    name: "憨憨",
+    age: 21
+    length: 2
+  }
+  Array.from(obj)
+  
+  // ES5 写法
+  const arr = [].slice.call(obj)
   ````
-
+  
   ````javascript
   Array.from(str, function(itrm) {
   	item.style.backgroundColor = red;
   	return item;
   })
   ````
-
+  
   - from 方法不仅可以转换数组，还可以对数组做一些操作
+  
+    - 如果 `Array.from` 接收到的参数为数组，则返回一个一样的新数组
+    - 只要是部署了 `Iterator` 接口的数据，`Array.from` 都可以转为数组
+  
+  - `Array.from` 的第二个参数可以传入一个类似于 `map` 的函数，如果第二参数中用到 `this` 第三个参数则用来绑定 `this`
+  
+    ```javascript
+    Array.from([1, 2, 3], v => v * v)
+    // 等同于
+    Array.from([1, 2, 3]).map(v => v * v)
+    ```
 
 ### - 数组方法
 
@@ -399,6 +430,18 @@ Number.isInteger(3.0000000000000002) // true
   - shift()   从数组开头删除元素
   - slice()   从数组中截取部分元素组合成新的数组（并不会改变原数组），不传第二参数时截到数组的末尾
   - splice()  可以添加、删除和替换数组中的元素，会对原数组进行改变，返回值为删除的元素。删除数组元素第一个参数为从那开始删除，第二参数为删除的数量
+  
+  - 很多数组的传统方法会改变原数组，例如 `push` `pop` `shift` `unshift` ，JavaScript 新推出几个方法不对原数组做出改变，返回一个原数组的拷贝
+  
+    `toReversed` 对应 `reverse` 用来颠倒数组成员的位置。
+  
+    `toSorted` 对应 `sort ` 用来对数组成员排序。
+  
+    `toSpliced` 对应 `splice` 用来在指定位置，删除指定数量的成员，并插入新成员。
+  
+    `with` 对应  `splice` 用来将指定位置的成员替换为新的值。
+  
+    新方法对应的原有方法，含义和用法完全一样，唯一不同的是不会改变原数组，而是返回原数组操作后的拷贝。
 
 ### - 清空数组
 
@@ -473,15 +516,69 @@ Number.isInteger(3.0000000000000002) // true
     | 参数   | 描述                                                         |
     | ------ | ------------------------------------------------------------ |
     | target | 必须，复制到指定目标索引位置                                 |
-    | start  | 可选，元素复制的起始位置                                     |
+    | start  | 可选，元素复制的起始位置。如果为负值，则表示倒数             |
     | end    | 可选，停止复制的索引位置（默认为 array.length）。如果为负值，则表示倒数 |
 
     ````javascript
     let arr = [1, 2, 3, 4, 5]
     arr.copyWithit(2, 0, 2) // 1, 2, 1, 2, 5
     ````
+  
+  - `fill` 方法使用给定值，填充一个数组
+  
+    可以接收第二和第三个参数，用于指定填充的起始位置和结束位置
+  
+    `注：如果填充的类型是引用类型，那么被赋值的是同一个内存地址，而不是深拷贝`
+  
+    ```javascript
+    Array(3).fill(6)  // [6, 6, 6]
+    ```
+  
+  - `flat` 和 `flatMap` 
+  
+    `flat` 用于将嵌套的数组拉平，变成一维数组，不改变原数组
+  
+    默认拉平一层，也可以指定拉平 `n` 层，或者全部拉平
+  
+    如果原数组有空位则会跳过空位返回新数组
+  
+    ```javascript
+    [1, 2, [3, 4]].flat()  // [1, 2, 3, 4] 默认拉平一层
+    [1, 2, [3, [4, 5]]].flat(2)  // [1, 2, 3, 4, 5] 指定拉平两层
+    [1, 2, [3, [4, 5]].flat(Infinity)  // [1, 2, 3, 4, 5] 无限制拉平
+    ```
+  
+    `flatMap` 对原数组的每个成员执行一个函数（相当于执行 `map` 方法）
+  
+    然后对返回值组成的数组执行 `flat` 方法
+  
+    `flatMap` 只能展开一层数组
+  
+    `flatMap` 方法的参数是一个遍历函数，该函数可以接收三个参数，分别是 当前数组成员，下标索引，原数组
+  
+    `flatMap` 方法还可以接收第二个参数，用来绑定遍历函数里面的 `this`
+  
+    ```javascript
+    [1, 2, 3].flatMap(v => [v, v * 2])  // [1, 2, 3, 4, 5, 6]
+    
+    [1, 2, 3].flatMap(v => [[v, v * 2]])  // [[1, 2], [3, 4], [5, 6]]
+    // 默认拉平一层 可以结合 flat 一起使用
+    [1, 2, 3].flatMap(v => [[v, v * 2]].flat(Infinity)) 
+    // [1, 2, 3, 4, 5, 6]
+    
+    // 绑定 this 
+    function callback(v, i) {
+      return [this[i].age, this[i].age * 2]
+    }
+    let arr = [
+      {name: "jolk", age: 1},
+      {name: "abc", age: 2},
+      {name: "jkl", age: 3}
+    ]
+    arr = arr.flatMap(callback, arr)
+    ```
 
-### - 查找数组中的元素
+### - 查找数组中的元素 
 
 - 查找元素
 
@@ -496,21 +593,59 @@ Number.isInteger(3.0000000000000002) // true
 
   - includes （`includes` 查找字符串返回值是布尔类型来判断；该方法不能查找引用类型，因为它们的内存地址是不相等的）
 
+    接收第二个参数则是搜索的起始位置，负数则是从后往前，可检测 `NaN`
+  
     ````javascript
     let arr = [1, 2, 3, 4, 5]
     arr.includes(3) // true
     ````
 
   - find （`find` 找到后会把值返回出来，找不到返回 `undefined` ；返回第一次找到的值，便不在继续查找；可以方便查找引用类型）
-
+  
+    `find` 回调函数接受三个参数，一次为当前的，索引下标和原数组
+  
     ````javascript
     let arr = [1, 2, 3, 4, 5]
     let str = arr.find(item => {
     	return item == 1 
     })
     ````
-
+  
   - findIndex（`findIndex` 与 `find` 的区别就在于返回值不一样；`findIndex` 找不到时返回 -1）
+  
+    - `find` 和 `findIndex` 都可以接收第二个参数，用来绑定回调函数的 `this` 对象
+  
+    ```javascript
+    function fn(val) {
+      return val > this.age
+    }
+    let person = {name: "John", age: 20};
+    [1, 2, 3, 30].find(fn, person)
+    ```
+  
+    另外，这两个方法都可以发现 `NaN`，弥补了数组的 `indexOf` 方法的不足
+  
+    ```javascript
+    [NaN].find(v => Object.is(NaN, v))  // NaN
+    
+    [NaN].indexOf(NaN)  // -1
+    ```
+  
+  - `find` 和 `findIndex` 都是从前向后找的，在 `ES2022` 中新增了两个从后向前找的方法，其余用法都一样
+  
+    - `findLast` 对应 `find` 
+  
+    - `findLastIndex` 对应 `findIndex`
+  
+  - `at` 方便获取数组最后以为成员，该方法接收一个整数为参数，返回对应位置的成员，支持负索引。这个方法用于数组、字符串、类型数组
+  
+    ```javascript
+    [1, 2, 3].at(1)  // 2
+    [1, 2, 3].at(-1) // 3
+    
+    // 参数超出范围返回 undefined
+    [1, 2, 3].at(-100) 
+    ```
 
 ### - 数组排序
 
@@ -627,7 +762,7 @@ Number.isInteger(3.0000000000000002) // true
   ````javascript
   let arr = ["请求", "威威", "呃呃呃"]
   let entries = arr.entries()
-  entries.next()
+  entries.next()  // [0: 0, 1: "请求"]
   ````
 
   - entries 的返回值是一个对象，要获取 value 我们可以使用解构赋值的方式进行解构
@@ -730,6 +865,29 @@ Number.isInteger(3.0000000000000002) // true
   	return pev > cur ? pev : cur 
   }, 0)
   ````
+
+### - 数组空位
+
+数组的空位指的是，数组的某一个位置没有任何值，比如 `Array` 构造函数返回的数组都是空位
+
+`注` 空位不是 `undefined` 某一个位置的值等于 `undefined` ，依然是有值的。空位是没有任何值，可以用 `in` 运算符验证
+
+```javascript
+0 in [ , 1, 2] // false 
+0 in [undefined, 2, 3] // true
+```
+
+数组方法对空位的处理
+
+- `forEach` 、`filter` 、`reduce` 、`every` 、`some` 都会跳过空位
+- `map` 会跳过空位，但会保留这个值
+- `join` 、`toString` 会将空位视为 `undefined` ，而 `undefined` 和 `null` 会被处理成空字符串
+- `Array.form` 会将空位转为 `undefined` 
+- 扩展运算符会将空位转为 `undefined`
+- `copyWithin` 会连空位一起拷贝
+- `fill` 会将空位视为正常的数组位置
+- `for of` 循环也会遍历空位
+- `entries` 、`keys` 、`values` 、`find` 、`findIndex` 会将空位处理成 `undefined`
 
 ## 四、Symbol
 
@@ -1848,7 +2006,20 @@ console.log(fn(2000, 11))
 
 所有的以函数为参数的函数都叫做回调函数
 
-当函数为回调函数时，是可以从表达式中抽离出来的（个人觉得有点脱裤子放屁的感觉）
+当函数为回调函数时，是可以从表达式中抽离出来的
+
+- 函数参数可以是一个表达式，但是它是一个惰性求值的表达式
+
+```javascript
+var x = 100;
+function fn(p = x + 1) {
+  console.log(p)
+}
+fn()  // 101
+```
+
+- 普通的求值表达式是会直接进行运算的
+- 由于函数的特性是调用执行
 
 ### - arguments
 
@@ -1875,6 +2046,12 @@ fn(1, 2, 3, 4, 5)
 let arr = [1, 2, 3, 4, 5].filter.(item => item <3 )
 console.log(arr)
 ````
+
+- 当函数体为一行时想要返回一个对象
+
+```javascript
+let foo = () => ({name: "沐沐汐", age: 18})
+```
 
 ### - 递归调用
 
@@ -1965,6 +2142,78 @@ function fn1() {
 fn("哈哈哈", fn1)
 ```
 
+### - 函数尾调用
+
+尾调用就是函数的最后一步是 `return` 调用另一个函数且没有其他行为
+
+必须在严格模式下
+
+```javascript
+// 函数尾调用
+function fn() {
+  return fn1(x);
+}
+
+// 不属于函数尾调用
+function fn() {
+  return fn1(x) + 1;
+}
+
+function fn() {
+  fn1(x);
+  return void 0;
+}
+```
+
+尾调用不一定出现在函数尾部，只要是最后一步操作即可
+
+```javascript
+function fn(y) {
+  if (y > 0) {
+    return fn1(x);
+  }
+  return fn2(x);
+}
+```
+
+#### 尾调用优化
+
+- 函数在调用会在内存形成一个 `调用记录`， 又称调用帧，报存调用位置和内部变量信息。
+
+- 例如一个函数中嵌套着另一个函数的调用，此时只有第一个函数执行完成后去调用内部的另一个函数，等待执行完成后这两个函数才会被释放，如果内部嵌套 n 个函数，一直叠加调用帧，最后就会形成栈溢出。
+
+- 尾调用由于是函数的最后一步操作，所以不需要保留外层的调用帧，因为调用位置、内部变量等信息都不会在用到，只要直接用内层函数的调用帧。
+
+```javascript
+function fn1() {
+  let num1 = 1;
+  let num2 = 2;
+  return fn2(num1 + num2);
+}
+fn1()
+```
+
+- 如果 `fn2` 函数不是尾调用，`fn1` 函数就需要保存内部变量和 `fn2` 的位置信息。但 `fn2` 调用之后，`fn1` 函数就结束了，所以执行到最后一步完全可以删除 `fn1` 函数的调用帧。
+- 这就叫做“尾调用优化”，即只保留内层函数的调用帧。如果所有函数都是尾调用，那么完全可以做到每次执行时，调用帧只有一项，这将大大节省内存。这就是“尾调用优化”的意义。
+
+#### 尾递归
+
+- 函数调用自身，称为递归，如果尾调用自身，就称为 `尾递归`
+
+- 递归非常耗费内存，因为需要同时保存成千上百个调用帧，容易发生调用栈溢出。但对于尾递归来说，由于只存在一个调用帧，所以永远不会发生栈溢出。
+
+```javascript
+function fn(n, num1 = 1, num2 = 1) {
+  if (n === 1 || n === 2) { return 1 };
+  fn(n - 1, num2, num1 + num2)
+}
+fn(10)
+```
+
+
+
+
+
 ### - 展开语法
 
 展开语法或者称为点语法体现的就是 `收/放` 特性，做为值时是 `放`，作为接收变量时是 `收`
@@ -1985,6 +2234,19 @@ let [...arr] = [1, 2, 3, 4]
 function fn(...args) {}
 fn(1, 2, 3, 4)
 ```
+
+替代了函数的 `apply` 方法
+
+`apply` 方法可以将数组转为函数参数
+
+```javascript
+function fn(x, y, z) {}
+fn.apply(null, [0, 1, 2])
+// 等同
+fn(...[0, 1, 2])
+```
+
+
 
 ### - this
 
@@ -2347,6 +2609,20 @@ fn()
     4. 利用函数返回对象 obj 
 
     ![image-20220427105602449](https://s2.loli.net/2022/12/13/hOywZLmYsWSieaT.png) 
+
+- 函数参数对作用域的影响
+
+  - 当函数的参数是一个回调函数时且这个回调函数中使用的变量与函数的某一个参数一致，那么回调函数中的使用的变量就是这个参数
+
+  ```javascript
+  var x = 1;
+  function fn(x, y = function () {x = 2}) {
+    var x = 3;
+    y();
+    console.log(x)
+  }
+  fn();
+  ```
 
 #### let/const
 
@@ -2817,6 +3093,28 @@ let arr = [1, 2, 3]
 let {0: first, [arr.length - 1]: last} = arr
 ```
 
+- 在使用扩展运算符拷贝时一定要注意，拷贝后的值是没有原来对象上的原型的。
+- 如何完整的拷贝一个对象
+
+```java
+const clone1 = {
+  __proto__: Object.getPrototypeOf(obj),
+  ...obj
+}
+
+const clone2 = Object.assign(
+	Object.create(Object.getPrototypeOf(obj)),
+  obj
+)
+  
+const clone3 = Object.create(
+	Object.getPrototypeOf(obj),
+  Object.getOwnPropertyDescriptors(obj)
+)
+```
+
+
+
 ### - 属性管理
 
 #### 添加属性
@@ -3035,6 +3333,30 @@ console.log(newobj) // Ultraman.address 被改变
 console.log(obj) // name 与 arr 被改变
 ```
 
+#### 对象克隆
+
+对象完整克隆，拷贝对象原型方法
+
+```js
+// 方法一
+const clone1 = {
+  __propo__: Object.getPropotypeOf(obj),
+  ...obj
+}
+
+// 方法二
+const clone2 = Object.assign(
+	Object.create(Object.getPropotypeOf(obj)),
+  obj
+)
+
+// 方法三
+const clone3 = Object.create(
+	Object.getPropotypeOf(obj),
+  Object.getOwPropertyDescriptors(obj)
+)
+```
+
 ### - 构建函数
 
 对象可以通过内置或自定义的构造函数创建
@@ -3209,8 +3531,6 @@ let obj = {
 }
 // 查看单个
 let desc = Object.getOwnPropertyDescriptor(obj, "name")
-// 查看全部
-let descs = Object.getOwnPropertyDescriptor(obj)
 ```
 
 属性包括以下四种特性
@@ -3310,6 +3630,45 @@ let obj = {name: "迪迦", age: 118}
 Object.freeze(obj)
 Object.isFrozen(obj) // true
 ```
+
+#### 可枚举性
+
+对象的每个属性都有一个描述对象，用来控制该属性的行。`Object.getOwnPropertyDescriptor`方法可以获取该属性的描述对象。
+
+描述对象的 `enumerable` 属性，称为 可枚举性， 如果该属性为 `false` ，就表示某些操作会忽略当前属性。
+
+会忽略 `enumerable` 为 `false` 属性的操作
+
+- `for...in`循环：只遍历对象自身的和继承的可枚举的属性。
+- `Object.keys()`：返回对象自身的所有可枚举的属性的键名。
+- `JSON.stringify()`：只串行化对象自身的可枚举的属性。
+- `Object.assign()`： 忽略`enumerable`为`false`的属性，只拷贝对象自身的可枚举的属性。
+
+只有`for...in`会返回继承的属性，其他三个方法都会忽略继承的属性，只处理对象自身的属性。
+
+引入“可枚举”（`enumerable`）这个概念的最初目的，就是让某些属性可以规避掉`for...in`操作，不然所有内部属性和方法都会被遍历到。
+
+`注` ES6 规定，所有 Class 的原型的方法都是不可枚举的。
+
+操作中引入继承的属性会让问题复杂化，大多数时候，我们只关心对象自身的属性。所以，尽量不要用`for...in`循环，而用`Object.keys()`代替。
+
+#### 属性的遍历
+
+`for...in`循环遍历对象自身的和继承的可枚举属性（不含 Symbol 属性）。
+
+`Object.keys`返回一个数组，包括对象自身的（不含继承的）所有可枚举属性（不含 Symbol 属性）的键名。
+
+`Object.getOwnPropertyNames`返回一个数组，包含对象自身的所有属性（不含 Symbol 属性，但是包括不可枚举属性）的键名。
+
+`Object.getOwnPropertySymbols`返回一个数组，包含对象自身的所有 Symbol 属性的键名。
+
+`Reflect.ownKeys`返回一个数组，包含对象自身的（不含继承的）所有键名，不管键名是 Symbol 或字符串，也不管是否可枚举。
+
+此上方法遍历对象的键名，都遵守同样的属性遍历的次序guize
+
+- 首先遍历所有数值键，按照数值升序排列
+- 其次遍历所有字符串键，按照加入时间升序排列
+- 最后遍历所有 `Symbol` 键，按照加入时间升序排列
 
 ### - 属性访问器
 
@@ -3717,7 +4076,161 @@ console.log(a[propName]) // 18
 console.log(a["Tom"]) // 18
 ```
 
+### - super 关键字
 
+`this` 关键字总是指向函数所在的当前对象，ES6 又新增一个关键字 `super` 指向当前对象的原型对象
+
+```javascript
+let proto = { name: "沐沐汐" }
+
+let obj = { 
+  name: "张思睿",
+  getName() {
+    console.log(super.name)  // 沐沐汐
+  }
+}
+Object.setPrototypeOf(obj, proto)
+```
+
+`注` 关键字 `super` 只能作用在对象的方法中。
+
+`JavaScript` 引擎内部，`super.name` 等同于 `Object.getPrototypeOf(this).name` 或 `Object.getPrototypeOf(this).name.call(this)`
+
+### - 对象方法
+
+#### Object.is
+
+用来比较两个值是否严格相等，与严格比较运算符的行为基本一致
+
+不同之处只有两个：一是 `+0` 不等于 `-0`，二是 `NaN` 等于自身
+
+```javascript
+Object.is(+0, -0)  // false
+Object.is(NaN, NaN)  // true
+```
+
+#### Object.assign
+
+用于对象的合并，将源对象的所有可枚举属性，复制到目标对象
+
+`Object.assign` 的第一个参数是目标对象，后面的参数都是源对象
+
+`注` 如果目标对象与源对象同名属性，或多个源对象有同名属性，则后面的属性会覆盖前面的属性
+
+```javascript
+let obj = { a: 1, b: 2 }
+let obj1 = { b: 2, c: 3 }
+let obj2 = { c: 3, d: 4 }
+Object.assign(obj, obj1, obj2)  // {a: 1, b: 2, c: 3, d: 4}
+```
+
+如果该参数不是对象，则会先转成对象，然后返回
+
+`undefined` 和 `null` 无法转成对象，不能当作首参数
+
+数值类型和布尔类型都不能做首参数
+
+```javascript
+Object.assign(undefined)  // 报错
+Object.assign({}, undefined)  // {}
+Object.assign({}, 1)  // {}
+Object.assign({}, true)  // {}
+```
+
+`Object.assign` 拷贝的属性是有限制的，只拷贝源对象的自身属性(不拷贝继承属性，原型)，也不拷贝不可枚举的属性
+
+属性名为 Symbol 值的属性，也会被`Object.assign()`拷贝。
+
+对数组的处理
+
+`Object.assign` 可以处理数组但是会把数组当作对象
+
+```javascript
+Object.assign([1, 2, 3], [4, 5])  // [4, 5, 3]
+```
+
+取值函数的处理
+
+`Object.assign` 只能进行值的复制，如果要复制的值是一个取值函数，那么将求值后在复制
+
+```javascript
+let obj = {};
+let fn = {
+  get foo() {
+    return 1
+  }
+}
+Object.assign(obj, fn)
+obj  // {foo: 1}
+```
+
+##### 常见用途
+
+- 为对象添加属性
+
+  ```javascript
+  class Fn {
+    constructor(x, y) {
+      Object.assign(this, {x, y})
+    }
+  }
+  ```
+
+- 为对象添加方法
+
+  ```javascript
+  Object.assign(SomeClass.prototype, {
+    fn1(...args) {},
+    fn2() {}
+  })
+  
+  // 等同于
+  SomeClass.prototype.fn1 = function(x, y) {}
+  SomeClass.prototype.fn2 = function() {}
+  ```
+
+- 克隆对象
+
+  ```javascript
+  Object.assign({}, obj)
+  
+  // 克隆继承
+  let orign = Object.getPrototypeOf(obj)
+  Object.assign(Object.create(orign), obj)
+  ```
+
+- 合并多个对象
+
+- 为属性指定默认值，利用的就是 `Object.assign` 的同名覆盖操作
+
+  由于存在浅拷贝问题，默认值和源对象的所有属性的值，最好都是简单类型，不要指向另一个对象，否则默认值的属性可能不起作用
+
+  ```javascript
+  const DEFAULTS = {
+    url: {
+      host: 'example.com',
+      port: 7070
+    },
+  };
+  Object.assign({}, DEFAULTS, {url: {port: 8080}})
+  ```
+
+#### proto 属性
+
+##### Object.create
+
+- 创建一个新对象，使用现有的对象作为新对象的原型
+- 不设置原型时返回一个纯净的新对象
+- 第一个参数为新对象的原型，第二个参数是自己给新对象添加的原型
+
+##### Object.setPrototypeOf
+
+- 用来设置对象的 `prototype` ，返回对象本身
+- 第一个参数为目标对象，第二个参数为原型对象
+
+##### Object.getPrototypeOf
+
+- 读取对象上的原型对象
 
 ## 原型与原型链
 

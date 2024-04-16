@@ -3716,7 +3716,7 @@ this.$nextTick(function() {
 
 **this.$nextTick这个方法作用是，当数据被修改后使用这个方法，会回调获取更新后的dom再渲染出来**
 
-![image-20220331154452446](C:\Users\27598\AppData\Roaming\Typora\typora-user-images\image-20220331154452446.png)
+![image-20220331154452446](https://s2.loli.net/2023/06/27/xMDzV7wFrULd2We.png)
 
 ### 动画与过渡
 

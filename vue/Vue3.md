@@ -52,6 +52,124 @@
    - 移除keyCode支持作为 v-on 的修饰符
    - ......
 
+### 5.优化 Vdom
+
+在 `vue2` 中，每次更新 `diff` 都是全量对比，`vue3` 则只对比带有标记的，这样大大减少了非动态的对比消耗
+
+```vue
+<span>Hello Word</span>
+<span>{{ message }}</span>
+<div class="a" :id="item">{{ item }}</div>
+```
+
+```js
+export function render(_cxt, _cache, $props, $setup, $data, $options) {
+  return (_openBlock, _createElementBlock(_Fragment, null), [
+    _createElementVNode("span", null, "Hello Word"),
+    _createElementVNode("span", null, _toDisplayString(_ctx.message), 1 /* TEXT */),
+    _createElementVNode("div", {
+      class: "a",
+      id: _ctx.item,
+    }, _toDisplayString(_ctx.item), 9 /* TEXT, PROPS */, ["id"])
+  ], 64 /* STABLE_FRAGMENT */)
+}
+```
+
+使用静态创建的 `vue3` 不会去进行对比
+
+而动态创建的 `vue3` 则会在创建时增添标记
+
+使用 `patch` `flag` 做静态标记，对比时才不会进行全量对比
+
+> patch flag 标记
+
+```js
+TEXT = 1  // 动态文本节点
+CLASS = 1<<1,1  // 2动态 class
+STYLE = 1<<2  // 4 动态 style
+PROPS = 1<<3  // 8 动态属性，但不包含类名和样式
+FULLPR0PS = 1<<4  // 16 具有动态 key 属性，当 key 改变时，需要进行完整的 diff 比较
+HYDRATE_ EVENTS = 1<<5  // 32 带有监听事件的节点
+STABLE FRAGMENT = 1<<6  // 64 一个不会改变子节点顺序的 fragment
+KEYED_ FRAGMENT = 1<<7  // 128 带有 key 属性的 fragment 或部分子节有 key
+UNKEYED FRAGMENT = 1<<8  // 256 子节点没有 key 的 fragment
+NEED PATCH = 1<<9  // 512 一个节点指挥进行非 props 比较
+DYNAMIC_SLOTS = 1<<10  // 1024 动态 slot
+HOISTED = 1  // 静态节点
+BALL = -2
+```
+
+### 6.支持 render JSX 写法
+
+```jsx
+render() {
+  return {
+    <>
+    	{ this.visable ? (
+    		<div>{ this.obj.name }</div>
+    	) : (
+      	<div>{ this.obj.price }</div>
+      ) }
+			<input v-model={ this.val } />
+			{[1, 2, 3].map(v => {
+        return <div>{ v }</div>
+      })}
+    </>
+  }
+}
+```
+
+## npm run dev 过程
+
+1. 当我们执行 `npm run dev` 时他会去找 package.json 文件，进行读取找到 `dev` 这个配置执行 `vite` 
+2. `vite` 此时会找到源码文件中的 `package.json` 文件，而这个文件给 `vite` 做了软链接 `bin`
+3. 在去执行到 `bin` 目录下会有3个 `vite` 的配置文件 `vite、vite.cmd、vite.ps1` 这三个文件为跨平台文件，方便在 `win、linux、mac`
+
+> 查找规则
+
+先从本地的 `node_moduels` 去找 `bin` 文件看是否有 `vite` 可执行，如果没有再去 `npm install -g` 全局包，如果还没找到则会去找环境变量。
+
+## 虚拟 DOM
+
+虚拟 `DOM` 就是通过 `JS` 来生成一个 `AST` 节点树
+
+```html
+<div>
+  <div>
+    <section>test</section>
+  </div>
+</div>
+```
+
+```js
+export function render(_cxt, _cache, $props, $setup, $data, $options) {
+  return (_openBlock, _createElementBlock("div", null, [
+    _createElementVNode("div", null [
+      _createElementVNode("section", null, "test")
+    ])
+  ]))
+}
+```
+
+为什么要有虚拟 `DOM` 
+
+```js
+let div = document.createElement("div")
+let str = ""
+for(const key in div) {
+  str += key + ""
+}
+console.log(str)
+```
+
+一个 `DOM` 上的属性时非常多的
+
+![image-20230710211432701](https://s2.loli.net/2023/07/10/REIWrBVl7JywZUu.png)
+
+所以直接操作 `DOM` 非常浪费性能
+
+解决方案就是我们可以用 JS 的计算性能来换取操作 `DOM` 所消耗的性能，既然我们逃不掉操作 `DOM` ，但是可以尽可能的少操作 `DOM` 
+
 # 创建Vue3.0工程
 
 ## 1.使用 vue-cli 创建
@@ -96,6 +214,15 @@ cd <project-name>
 npm install
 ## 运行
 npm run dev
+
+## 使用 yarn 搭建
+yarn create vite <ProjectName> --template vue
+## 进入工程目录
+cd <ProjectName>
+## 安装依赖
+yarn install
+## 运行 
+yarn dev
 ```
 
 ## 分析工程结构
@@ -401,17 +528,14 @@ export default {
 }
 ```
 
-
-
-- 
 - setup执行的时机
-  
+
   - 在beforeCreate之前执行一次，this是`undefined`。
 - setup的参数
   - props：值为对象，包含：组件外部传递过来，且组件内部声名接收了的属性。
-  
+
     **子组件**
-  
+
     ```javascript
     <template>
         <div>
@@ -436,15 +560,15 @@ export default {
     };
     </script>
     ```
-  
+
     **父组件**
-  
+
     ```javascript
     ......
     <Demo msg="你好a" school="后盾网"></Demo>
     ......
     ```
-  
+
   - context：上下文对象
     - attrs：值为对象，包含：组件外部传递过来，但没有在props配置中声名的属性，相当于`this.$attrs`。
     - slots：收到的插槽内容，相当于`this.$slots`。
@@ -1071,10 +1195,6 @@ Vue3.0中的direction的钩子函数数量和组件是一直的，其中表示do
 
 ```
 
-
-
-
-
 ## 其他属性
 
 - data选项应始终被声明为一个函数。
@@ -1304,7 +1424,9 @@ Vue3.0中的direction的钩子函数数量和组件是一直的，其中表示do
 </script>
 ```
 
-# 测试数据
+# 好用的工具
+
+## 测试数据
 
 使用 `json-server` 开启数据测试
 
@@ -1320,4 +1442,37 @@ Vue3.0中的direction的钩子函数数量和组件是一直的，其中表示do
 
 `yarn add mockjs`
 
-......
+## 解决 import { ref, reactive... } 引入问题
+
+安装工具
+
+```shell
+yarn add unplugin-auto-import -D
+```
+
+在 `vite.config.js` 中进行配置
+
+```javascript
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import { resolve } from "path"  // vite 版本大于 3.1.x 不支持 commonJS
+import AutoImport from "unplugin-auto-import/vite"
+// const path = require("path")
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [
+    vue(),
+    AutoImport({
+      imports: ["vue", "vue-router"]
+    })
+  ],
+  resolve: {
+    alias: {
+      "@": resolve(__dirname, "./src")
+    }
+  }
+})
+
+```
+

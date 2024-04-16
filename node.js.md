@@ -608,8 +608,6 @@ res.setHeader('Location', '/')
 res.end()
 ```
 
-
-
 ----
 
 ### favicon.ico
@@ -1213,7 +1211,7 @@ let foo = "啦啦啦"
 * */
 ````
 
-````javascript
+````js
 // a 模块
 let bExport = require("./b")
 console.log(bExport.foo) // 哒哒哒
@@ -3206,3 +3204,14 @@ JSON.parse(data).具体数据
 <input type="hidden" name="id" value="{{ student.id }}" />
 ```
 
+### nodejs 底层原理
+
+`Node.js` 主要由 `V8、Libuv` 和第三方库组成：
+
+1. `Libuv` 跨平台的异步 `IO` 库，但他提供的功能不仅仅是 `IO` ，还包括进程、线程、信号、定时器、进程间通信，线程池等。
+2. 第三方库：异步 `DNS` 解析 `(cares)` HTTP 解析器 (旧版使用 `http_parser` 新版使用 `llhttp`)、HTTP2 解析器 `(nghttp2)` 、解压解缩库 `(zlib)` 、加密解密库 `(openssl)` 等等。
+3. `V8` ：实现 `JS` 解析、执行和支持自定义扩展，得益于 `V8` 支持自定义扩展，才有了 `Node.js`
+
+你也可以理解成 `js` 应用层，桥：`C、C++` 底层： `C、C++`
+
+![image-20230710203117603](https://s2.loli.net/2023/07/10/bM2IlV5QehxaTvi.png)
